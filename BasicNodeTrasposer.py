@@ -4,14 +4,27 @@ and that image is of RGB pixels
 '''
 def get_graph(image):
     graph = transpose_nodes(image)
-
     get_neighbors(graph)
+    return graph
 
+def getEnds(image):
     width, height = image.size
 
-    print_graph(graph, width, height )
+    topRow = 0
+    botRow = height - 1
 
-    return graph
+    topCoord = None
+    botCoord = None
+
+    for col in range(0, width):
+        tCoord = (col, topRow)
+        bCoord = (col, botRow)
+        if image.getpixel(tCoord) == (255, 255, 255):
+            topCoord = tCoord
+        if image.getpixel(bCoord) == (255, 255, 255):
+            botCoord = bCoord
+
+    return (topCoord, botCoord)
 
 def print_graph(graph, width, height):
     for row in range(0, height):
