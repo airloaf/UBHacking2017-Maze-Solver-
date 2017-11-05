@@ -1,23 +1,24 @@
 import PIL.Image as Image
+import sys;
 
 import BasicNodeTrasposer
 import BreadthFirstSearchSolver
+import PaintImage
 
-image = Image.open("bigmaze.bmp")
+sys.setrecursionlimit(10000)
+
+image = Image.open("medmaze.bmp")
 image = image.convert('RGB')
 
 width, height = image.size;
 
+#Get the graph
 graph = BasicNodeTrasposer.get_graph(image)
-print("Created graph")
 
+#Get endpoints
 start, end = BasicNodeTrasposer.getEnds(image)
 
+#Create a queue
 queue = BreadthFirstSearchSolver.get_queued_nodes(graph, start, end);
-print("did BFS")
 
-pix = image.load()
-for i in queue:
-    pix[i[0], i[1]] = (0, 255, 0)
-
-image.save("new.bmp")
+PaintImage.paint(image, queue, "new.bmp")
