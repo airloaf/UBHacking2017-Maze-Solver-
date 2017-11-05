@@ -55,36 +55,6 @@ def create_graph(image, end):
 
     return graph
 
-def AStar(graph, current, end, open, closed):
-
-    if current == end:
-        return
-
-    closed.append(current)
-
-    north = (current[0], current[1] - 1)
-    south = (current[0], current[1] + 1)
-    east = (current[0] + 1, current[1])
-    west = (current[0] - 1, current[1])
-
-    AStar_check_neighbor(graph, current, north, open, closed)
-    AStar_check_neighbor(graph, current, south, open, closed)
-    AStar_check_neighbor(graph, current, east, open, closed)
-    AStar_check_neighbor(graph, current, west, open, closed)
-
-    if len(open) < 1:
-        return
-
-    smallest = None
-    lowestF = math.inf
-
-    for i in open:
-        if graph[i].fValue < lowestF:
-            lowestF = graph[i].fValue;
-            smallest = i;
-
-    AStar(graph, smallest, end, open, closed)
-
 def AStar_check_neighbor(graph, current, neighbor, open, closed):
     #Check if the neighbor is in the graph
     if neighbor not in graph:
@@ -104,6 +74,38 @@ def AStar_check_neighbor(graph, current, neighbor, open, closed):
     if neighbor not in open:
         open.append(neighbor)
 
+def AStar(graph, current, end, open, closed):
+
+    closed.append(current)
+
+    if current == end:
+        return
+
+    north = (current[0], current[1] - 1)
+    south = (current[0], current[1] + 1)
+    east = (current[0] + 1, current[1])
+    west = (current[0] - 1, current[1])
+
+    AStar_check_neighbor(graph, current, north, open, closed)
+    AStar_check_neighbor(graph, current, south, open, closed)
+    AStar_check_neighbor(graph, current, east, open, closed)
+    AStar_check_neighbor(graph, current, west, open, closed)
+
+def get_smallest(graph, open):
+
+    smallest = None
+    lowestF = math.inf
+    for i in open:
+
+        if graph[i].fValue < lowestF:
+            lowestF = graph[i].fValue;
+            smallest = i;
+
+    if smallest != None:
+        open.remove(smallest)
+
+    return smallest
+
 def get_nodes(image):
 
     #Get the start and end points
@@ -113,11 +115,13 @@ def get_nodes(image):
     graph = create_graph(image, end)
 
     #Empty open and closed list
-    open = []
+    open = [start]
     closed = []
+    graph[start].fValue = graph[start].hValue
 
-    #Use the AStar
-    AStar(graph, start, end, open, closed)
+    while end not in closed:
+        smallest = get_smallest(graph, open)
+        AStar(graph, smallest, end, open, closed)
 
     queue = []
 
@@ -127,8 +131,6 @@ def get_nodes(image):
     while par != None:
         queue.append(par)
         par = graph[par].parent
-
-    print(par)
 
     return queue
 
