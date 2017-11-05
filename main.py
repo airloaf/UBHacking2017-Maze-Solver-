@@ -6,6 +6,7 @@ import PaintImage
 import os
 
 import threading
+import time
 
 import tkinter as tk
 from tkinter.filedialog import askopenfilename
@@ -43,6 +44,8 @@ def solve():
     global status_label
     global choice
 
+    a = time.time()
+
     file_save_name = "output/" + file_save_name
 
     status_label["text"] = "Loading Image ..."
@@ -57,7 +60,10 @@ def solve():
         PaintImage.paint_rainbow(image, queue, file_save_name + ".bmp")
     else:
         PaintImage.paint_grad(image, queue, file_save_name + ".bmp")
-    status_label["text"] = "Done!"
+
+    b = time.time()
+
+    status_label["text"] = ("Done in {:0.2f}".format(b-a) + " seconds")
 
 
 
@@ -88,10 +94,3 @@ start_button.grid(row=3, column=0, columnspan=2)
 status_label.grid(row=3, column=2, columnspan=2)
 
 root.mainloop()
-
-#image = Image.open("4096x4096.bmp")
-#image = image.convert('RGB')
-
-#queue = AStarSolver.get_nodes(image)
-
-#PaintImage.paint(image, queue, "new.bmp")
