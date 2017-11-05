@@ -15,7 +15,23 @@ def hsv_to_rgb(h, s, v):
     if i == 4: return (t, p, v)
     if i == 5: return (v, p, q)
 
-def paint(image, queue, saveName):
+def paint_grad(image, queue, saveName):
+    l = len(queue) - 1
+    incr = 360 / l
+
+    curG = 0.0
+    curR = 255.0
+
+    pix = image.load()
+    for i in queue:
+        color = (int(curR), int(curG), int(0.0))
+        pix[i[0], i[1]] = color
+        curR -= incr
+        curG += incr
+
+    image.save(saveName)
+
+def paint_rainbow(image, queue, saveName):
     l = len(queue) - 1
     incr = 360 / l
     h = 0.0
