@@ -1,5 +1,7 @@
 # Maze Solver for UB Hacking 2017
 
+This project was made for the UB Hacking 24 hour hackathon on Nov 4-5 2017
+
 This python project will solve any maze with the following restrictions:
 
 * Maze walls are represented by black pixels
